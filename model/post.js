@@ -227,8 +227,44 @@ const postFilesData = async (req, res) => {
   }
 };
 
+const deleteFolder =  (req,res) => {
+  try {
+    // Delete the folder and its subfolders recursively
+    const { id } = req.params;
+console.log(id)
+    deleteSubitems(id);
+
+     return res.status(200).json("deleted successfully");
+  } catch (error) {
+    console.error("Error deleting folder and subitems:", error);
+  }
+};
+
+const deleteSubitems = async (folderId) => {
+  try {
+    // Delete the folder and its subfolders recursively
+    console.log(folderId)
+    await Folder.deleteOne({ _id: folderId });
+    await File.deleteOne({ _id: folderId });
+
+    await Folder.deleteMany({ parentFolder: folderId });
+    await File.deleteMany({ parentFolder: folderId });
+
+    // Find and delete subfolders recursively
+    const subfolders = await Folder.find({ parentFolder: folderId });
+    console.log(subfolders);
+    for (const subfolder of subfolders) {
+      await deleteSubitems(subfolder._id);
+    }
+    return "deleted successfully";
+  } catch (error) {
+    console.error("Error deleting folder and subitems:", error);
+  }
+};
+
 module.exports = {
 postParentFolders,
 postFilesData,
-postFiles
+postFiles,
+deleteFolder
 };

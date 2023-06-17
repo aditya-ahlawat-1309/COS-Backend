@@ -7,10 +7,10 @@ const {
   getFilesData,
   getSubfoldersAndFiles,
 } = require("../model/get");
-const { postParentFolders, postFilesData, postFiles } = require("../model/post");
+const { postParentFolders, postFilesData, postFiles, deleteFolder } = require("../model/post");
 const {commandData} = require("../model/commands")
 
-const {getCentralIcons, createIcons, getIcons, getAdminDetails, createCentralIcons, deleteCentralIcon} = require("../model/icons")
+const {getCentralIcons, createIcons, getIcons, getAdminDetails, createCentralIcons, deleteCentralIcon, deleteAddedIcon} = require("../model/icons")
 
 const router = express.Router();
 
@@ -25,6 +25,7 @@ router.route("/get/subFolders").post(getSubfoldersAndFiles);
 router.route("/post/folders").post(postParentFolders);
 router.route("/post/files").post(postFiles);
 router.route("/post/texts").post(postFilesData);
+router.route("/post/delete/:id").post(deleteFolder);
 
 
 router.route("/register").post(registerUser);
@@ -40,5 +41,6 @@ router.route("/central-icons").get(getCentralIcons);
 router.route("/create").post(createCentralIcons)
 router.route("/update/:id").post(createCentralIcons);
 router.route("/delete/:id").post(deleteCentralIcon);
+router.route("/delete/icon/:id").post(deleteAddedIcon);
 
 module.exports = {routerFolder: router};

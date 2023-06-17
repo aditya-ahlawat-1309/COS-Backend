@@ -80,6 +80,20 @@ const deleteCentralIcon = async (req, res) => {
   }
 };
 
+const deleteAddedIcon = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the central icon by ID and delete it
+    await Icon.findByIdAndRemove(id);
+
+    res.status(200).json({ message: "Central icon deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting central icon:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 const getIcons = async (req, res) => {
      const [, token] = req.body.headers.Authorization.split(" ");
@@ -142,5 +156,6 @@ module.exports = {
   getAdminDetails,
   createCentralIcons,
   updateCentralIcon,
-  deleteCentralIcon
+  deleteCentralIcon,
+  deleteAddedIcon
 };
